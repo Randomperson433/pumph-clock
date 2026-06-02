@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pumphrey Countdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --accent: #ff2d2d;
+      --dim: #333;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      overflow: hidden;
+    }
+
+    /* scanline overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.18) 3px,
+        rgba(0,0,0,0.18) 4px
+      );
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .container {
+      text-align: center;
+      user-select: none;
+      padding: 2rem;
+    }
+
+    .label-top {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(18rem, 40vw, 28rem);
+      line-height: 0.85;
+      color: var(--fg);
+      display: block;
+      position: relative;
+      transition: transform 0.1s ease;
+    }
+
+    /* red drop shadow for drama */
+    .number.has-count {
+      text-shadow:
+        6px 6px 0px var(--accent),
+        12px 12px 0px rgba(255,45,45,0.3);
+    }
+
+    .number.zero {
+      text-shadow: none;
+      color: var(--accent);
+    }
+
+    .label-bottom {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      letter-spacing: 0.12em;
+      color: var(--fg);
+      line-height: 1;
+      margin-top: 0.5rem;
+    }
+
+    .label-bottom.done {
+      color: var(--accent);
+      font-size: clamp(1.8rem, 5vw, 4rem);
+    }
+
+    .next-class {
+      margin-top: 2.5rem;
+      font-size: clamp(0.6rem, 1.5vw, 0.85rem);
+      color: var(--dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .next-class span {
+      color: #666;
+    }
+
+    /* countdown tick animation */
+    @keyframes flash {
+      0%   { opacity: 1; transform: scale(1.04); }
+      50%  { opacity: 0.6; }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .tick { animation: flash 0.4s ease; }
+
+    /* flicker on load */
+    @keyframes flicker {
+      0%,100% { opacity: 1; }
+      20%      { opacity: 0.85; }
+      40%      { opacity: 1; }
+      60%      { opacity: 0.9; }
+      80%      { opacity: 1; }
+    }
+    .container { animation: flicker 0.6s ease forwards; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="label-top">classes remaining</div>
+  <span class="number" id="num">7</span>
+  <div class="label-bottom" id="lbl">PUMPHREYS LEFT</div>
+  <div class="next-class" id="next"></div>
+</div>
+
+<script>
+  // All class END times in ET (local to server / user) — stored as ISO strings
+  // The count decrements AFTER each class time passes
+  const classTimes = [
+    "2026-06-03T11:04:00",
+    "2026-06-04T09:19:00",
+    "2026-06-08T11:33:00",
+    "2026-06-09T10:26:00",
+    "2026-06-10T10:08:00",
+    "2026-06-12T10:26:00",
+    "2026-06-15T09:19:00",
+  ];
+
+  const numEl  = document.getElementById('num');
+  const lblEl  = document.getElementById('lbl');
+  const nextEl = document.getElementById('next');
+  let lastCount = null;
+
+  function getCount() {
+    const now = new Date();
+    // Count how many class times are still in the future
+    return classTimes.filter(t => new Date(t) > now).length;
+  }
+
+  function getNextClass() {
+    const now = new Date();
+    return classTimes.map(t => new Date(t)).find(d => d > now) || null;
+  }
+
+  function formatNext(d) {
+    const opts = { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' };
+    return d.toLocaleString('en-US', opts);
+  }
+
+  function update() {
+    const count = getCount();
+
+    if (count !== lastCount) {
+      numEl.classList.add('tick');
+      setTimeout(() => numEl.classList.remove('tick'), 400);
+      lastCount = count;
+    }
+
+    numEl.textContent = count;
+
+    if (count === 0) {
+      numEl.classList.remove('has-count');
+      numEl.classList.add('zero');
+      lblEl.textContent = 'NO MORE PUMPHREY!';
+      lblEl.classList.add('done');
+      nextEl.textContent = '';
+    } else {
+      numEl.classList.add('has-count');
+      numEl.classList.remove('zero');
+      lblEl.textContent = count === 1 ? 'PUMPHREY LEFT' : 'PUMPHREYS LEFT';
+      lblEl.classList.remove('done');
+
+      const next = getNextClass();
+      if (next) {
+        nextEl.innerHTML = `next: <span>${formatNext(next)}</span>`;
+      }
+    }
+  }
+
+  update();
+  setInterval(update, 10000); // re-check every 10s
+</script>
+</body>
+</html>
