@@ -3,200 +3,372 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pumphrey Countdown</title>
+  <title>Class Countdown</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --bg: #000;
       --fg: #fff;
       --accent: #ff2d2d;
-      --dim: #333;
+      --dim: #444;
+      --dim2: #222;
+      --btn-bg: #111;
+      --btn-border: #333;
+      --btn-active: #fff;
     }
-
     html, body {
-      width: 100%; height: 100%;
+      width: 100%; min-height: 100%;
       background: var(--bg);
       color: var(--fg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-family: 'Space Mono', monospace;
-      overflow: hidden;
     }
-
-    /* scanline overlay */
     body::after {
       content: '';
       position: fixed; inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 3px,
-        rgba(0,0,0,0.18) 3px,
-        rgba(0,0,0,0.18) 4px
-      );
+      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px);
       pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--btn-border);
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      position: relative;
       z-index: 10;
     }
-
-    .container {
-      text-align: center;
-      user-select: none;
-      padding: 2rem;
+    .block-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .block-tab {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--dim);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+    }
+    .block-tab:hover { border-color: #666; color: #999; }
+    .block-tab.active {
+      border-color: var(--btn-active);
+      color: var(--btn-active);
+      background: #1a1a1a;
+    }
+    .block-tab.done-tab {
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
     }
 
-    .label-top {
+    /* ── THREE DOTS MENU ── */
+    .menu-wrap { position: relative; }
+    .dots-btn {
+      background: none;
+      border: 1px solid var(--btn-border);
+      color: var(--dim);
+      cursor: pointer;
+      padding: 0.35rem 0.65rem;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      transition: color 0.15s;
+    }
+    .dots-btn:hover { color: #fff; border-color: #666; }
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0; top: calc(100% + 6px);
+      background: #111;
+      border: 1px solid #333;
+      padding: 0.75rem;
+      min-width: 220px;
+      z-index: 200;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .dropdown.open { display: flex; }
+    .dropdown label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 0.1rem;
+    }
+    .dropdown input[type="text"] {
+      background: #000;
+      border: 1px solid #333;
+      color: #fff;
       font-family: 'Space Mono', monospace;
-      font-size: clamp(0.7rem, 2vw, 1rem);
+      font-size: 0.8rem;
+      padding: 0.4rem 0.5rem;
+      width: 100%;
+      outline: none;
+    }
+    .dropdown input[type="text"]:focus { border-color: #888; }
+    .dropdown-row { display: flex; flex-direction: column; }
+    .save-btn {
+      margin-top: 0.25rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
       font-weight: 700;
+      text-transform: uppercase;
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .save-btn:hover { background: #ddd; }
+
+    /* ── MAIN DISPLAY ── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 60px);
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    .label-top {
+      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
       letter-spacing: 0.4em;
       color: var(--dim);
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
-
     .number {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(18rem, 40vw, 28rem);
-      line-height: 0.85;
+      font-size: clamp(14rem, 35vw, 26rem);
+      line-height: 0.82;
       color: var(--fg);
       display: block;
-      position: relative;
-      transition: transform 0.1s ease;
+      transition: transform 0.1s;
     }
-
-    /* red drop shadow for drama */
     .number.has-count {
-      text-shadow:
-        6px 6px 0px var(--accent),
-        12px 12px 0px rgba(255,45,45,0.3);
+      text-shadow: 5px 5px 0 var(--accent), 10px 10px 0 rgba(255,45,45,0.25);
     }
-
     .number.zero {
-      text-shadow: none;
       color: var(--accent);
+      text-shadow: none;
     }
-
     .label-bottom {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.5rem, 8vw, 6rem);
-      letter-spacing: 0.12em;
-      color: var(--fg);
-      line-height: 1;
-      margin-top: 0.5rem;
+      font-size: clamp(2rem, 6vw, 5rem);
+      letter-spacing: 0.1em;
+      line-height: 1.1;
+      margin-top: 0.4rem;
     }
-
-    .label-bottom.done {
-      color: var(--accent);
-      font-size: clamp(1.8rem, 5vw, 4rem);
-    }
-
+    .label-bottom.done { color: var(--accent); font-size: clamp(1.5rem, 4vw, 3.5rem); }
     .next-class {
-      margin-top: 2.5rem;
-      font-size: clamp(0.6rem, 1.5vw, 0.85rem);
+      margin-top: 2rem;
+      font-size: clamp(0.6rem, 1.3vw, 0.8rem);
       color: var(--dim);
       letter-spacing: 0.2em;
       text-transform: uppercase;
     }
-
-    .next-class span {
-      color: #666;
+    .next-class span { color: #777; }
+    .block-badge {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #555;
+      border: 1px solid #222;
+      padding: 0.2rem 0.6rem;
     }
 
-    /* countdown tick animation */
     @keyframes flash {
-      0%   { opacity: 1; transform: scale(1.04); }
-      50%  { opacity: 0.6; }
-      100% { opacity: 1; transform: scale(1); }
+      0% { transform: scale(1.04); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    .tick { animation: flash 0.4s ease; }
-
-    /* flicker on load */
+    .tick { animation: flash 0.35s ease; }
     @keyframes flicker {
-      0%,100% { opacity: 1; }
-      20%      { opacity: 0.85; }
-      40%      { opacity: 1; }
-      60%      { opacity: 0.9; }
-      80%      { opacity: 1; }
+      0%,100% { opacity:1 } 25% { opacity:0.88 } 60% { opacity:1 } 80% { opacity:0.93 }
     }
-    .container { animation: flicker 0.6s ease forwards; }
+    .main { animation: flicker 0.5s ease; }
   </style>
 </head>
 <body>
-<div class="container">
-  <span class="number" id="num">7</span>
-  <div class="label-bottom" id="lbl">PUMPHREYS LEFT</div>
+
+<div class="topbar">
+  <div class="block-tabs" id="tabs"></div>
+  <div class="menu-wrap">
+    <button class="dots-btn" id="dotsBtn" title="Settings">• • •</button>
+    <div class="dropdown" id="dropdown">
+      <div class="dropdown-row">
+        <label>Teacher name for active block</label>
+        <input type="text" id="teacherInput" placeholder="e.g. Pumphrey" />
+      </div>
+      <button class="save-btn" id="saveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="main" id="main">
+  <div class="block-badge" id="badge">A BLOCK</div>
+  <div class="label-top">classes remaining</div>
+  <span class="number" id="num">—</span>
+  <div class="label-bottom" id="lbl"></div>
   <div class="next-class" id="next"></div>
 </div>
 
 <script>
-  const classTimes = [
-    "2026-06-03T10:11:00",
-    "2026-06-04T08:15:00",
-    "2026-06-08T10:29:00",
-    "2026-06-09T09:22:00",
-    "2026-06-10T09:15:00",
-    "2026-06-12T09:22:00",
-    "2026-06-15T08:15:00",
-  ];
+// ── DATA ──────────────────────────────────────────────────────────────────
+// End times for each class occurrence (class "used up" once end time passes)
+const blockTimes = {
+  A: ['2026-06-04T09:19:00','2026-06-08T11:33:00','2026-06-09T10:26:00','2026-06-10T10:08:00','2026-06-12T10:26:00','2026-06-15T09:19:00'],
+  B: ['2026-06-04T10:26:00','2026-06-05T09:19:00','2026-06-09T11:33:00','2026-06-10T11:04:00','2026-06-12T09:19:00','2026-06-15T10:26:00'],
+  C: ['2026-06-04T11:33:00','2026-06-05T10:26:00','2026-06-08T09:19:00','2026-06-10T12:00:00','2026-06-11T09:19:00','2026-06-15T11:33:00'],
+  D: ['2026-06-05T11:33:00','2026-06-08T10:26:00','2026-06-09T09:19:00','2026-06-11T10:26:00','2026-06-12T11:33:00'],
+  E: ['2026-06-04T13:08:00','2026-06-08T14:46:00','2026-06-09T13:08:00','2026-06-11T11:33:00','2026-06-12T14:46:00','2026-06-15T13:08:00'],
+  F: ['2026-06-04T14:46:00','2026-06-05T13:08:00','2026-06-09T14:46:00','2026-06-10T14:46:00','2026-06-11T13:08:00','2026-06-15T14:46:00'],
+  G: ['2026-06-05T14:46:00','2026-06-08T13:08:00','2026-06-10T13:50:00','2026-06-11T14:46:00','2026-06-12T13:08:00'],
+};
 
-  const numEl  = document.getElementById('num');
-  const lblEl  = document.getElementById('lbl');
-  const nextEl = document.getElementById('next');
-  let lastCount = null;
+const BLOCKS = ['A','B','C','D','E','F','G'];
 
-  function getCount() {
-    const now = new Date();
-    // Count how many class times are still in the future
-    return classTimes.filter(t => new Date(t) > now).length;
+// ── STATE ─────────────────────────────────────────────────────────────────
+let activeBlock = localStorage.getItem('activeBlock') || 'A';
+let teachers = JSON.parse(localStorage.getItem('teachers') || '{}');
+// Pre-populate A block with Pumphrey
+if (!teachers['A']) teachers['A'] = 'Pumphrey';
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+function getCount(block) {
+  const now = new Date();
+  return blockTimes[block].filter(t => new Date(t) > now).length;
+}
+
+function getNext(block) {
+  const now = new Date();
+  return blockTimes[block].map(t => new Date(t)).find(d => d > now) || null;
+}
+
+function formatDate(d) {
+  return d.toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function possessive(name) {
+  if (!name) return null;
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+  // If ends in s (case-insensitive), don't add s
+  if (trimmed.match(/s$/i)) return trimmed + "'";
+  return trimmed + 's';
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+const numEl   = document.getElementById('num');
+const lblEl   = document.getElementById('lbl');
+const nextEl  = document.getElementById('next');
+const badgeEl = document.getElementById('badge');
+const tabsEl  = document.getElementById('tabs');
+let lastCounts = {};
+
+function renderTabs() {
+  tabsEl.innerHTML = '';
+  BLOCKS.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'block-tab' + (b === activeBlock ? ' active' : '') + (getCount(b) === 0 ? ' done-tab' : '');
+    btn.textContent = b + ' BLOCK';
+    btn.onclick = () => { activeBlock = b; localStorage.setItem('activeBlock', b); renderTabs(); renderMain(); };
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderMain() {
+  const b = activeBlock;
+  const count = getCount(b);
+  const name = possessive(teachers[b]);
+  badgeEl.textContent = b + ' BLOCK';
+
+  if (count !== lastCounts[b]) {
+    numEl.classList.add('tick');
+    setTimeout(() => numEl.classList.remove('tick'), 350);
+    lastCounts[b] = count;
   }
 
-  function getNextClass() {
-    const now = new Date();
-    return classTimes.map(t => new Date(t)).find(d => d > now) || null;
-  }
+  numEl.textContent = count;
 
-  function formatNext(d) {
-    const opts = { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' };
-    return d.toLocaleString('en-US', opts);
-  }
-
-  function update() {
-    const count = getCount();
-
-    if (count !== lastCount) {
-      numEl.classList.add('tick');
-      setTimeout(() => numEl.classList.remove('tick'), 400);
-      lastCount = count;
-    }
-
-    numEl.textContent = count;
-
-    if (count === 0) {
-      numEl.classList.remove('has-count');
-      numEl.classList.add('zero');
-      lblEl.textContent = 'NO MORE PUMPHREY!';
-      lblEl.classList.add('done');
-      nextEl.textContent = '';
+  if (count === 0) {
+    numEl.className = 'number zero';
+    lblEl.className = 'label-bottom done';
+    if (name) {
+      lblEl.textContent = 'NO MORE ' + name.toUpperCase().replace(/[']/g,'') + '!';
     } else {
-      numEl.classList.add('has-count');
-      numEl.classList.remove('zero');
-      lblEl.textContent = count === 1 ? 'PUMPHREY LEFT' : 'PUMPHREYS LEFT';
-      lblEl.classList.remove('done');
+      lblEl.textContent = 'NO MORE ' + b + ' BLOCK!';
+    }
+    nextEl.textContent = '';
+  } else {
+    numEl.className = 'number has-count';
+    lblEl.className = 'label-bottom';
+    if (name) {
+      lblEl.textContent = (count === 1 ? name : name).toUpperCase() + ' LEFT';
+      // singular: "1 Pumphrey left" — possessive still looks fine
+      // Could do: count === 1 ? plain name : possessive, but "Pumphreys" is the joke
+    } else {
+      lblEl.textContent = b + ' BLOCK' + (count === 1 ? '' : 'S') + ' LEFT';
+    }
 
-      const next = getNextClass();
-      if (next) {
-        nextEl.innerHTML = `next: <span>${formatNext(next)}</span>`;
-      }
+    const nxt = getNext(b);
+    if (nxt) {
+      nextEl.innerHTML = `next: <span>${formatDate(nxt)}</span>`;
     }
   }
+}
 
-  update();
-  setInterval(update, 10000); // re-check every 10s
+// ── SETTINGS DROPDOWN ─────────────────────────────────────────────────────
+const dotsBtn  = document.getElementById('dotsBtn');
+const dropdown = document.getElementById('dropdown');
+const input    = document.getElementById('teacherInput');
+const saveBtn  = document.getElementById('saveBtn');
+
+dotsBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  dropdown.classList.toggle('open');
+  if (dropdown.classList.contains('open')) {
+    input.value = teachers[activeBlock] || '';
+    input.focus();
+  }
+});
+
+document.addEventListener('click', e => {
+  if (!dropdown.contains(e.target) && e.target !== dotsBtn) {
+    dropdown.classList.remove('open');
+  }
+});
+
+saveBtn.addEventListener('click', () => {
+  teachers[activeBlock] = input.value.trim();
+  localStorage.setItem('teachers', JSON.stringify(teachers));
+  dropdown.classList.remove('open');
+  renderMain();
+  renderTabs();
+});
+
+input.addEventListener('keydown', e => { if (e.key === 'Enter') saveBtn.click(); });
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+renderTabs();
+renderMain();
+setInterval(() => { renderMain(); renderTabs(); }, 10000);
 </script>
 </body>
 </html>
