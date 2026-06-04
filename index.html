@@ -25,13 +25,7 @@
       color: var(--fg);
       font-family: 'Space Mono', monospace;
     }
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px);
-      pointer-events: none;
-      z-index: 100;
-    }
+
 
     /* ── TOP BAR ── */
     .topbar {
@@ -223,6 +217,7 @@
 
 <div class="main" id="main">
   <div class="block-badge" id="badge">A BLOCK</div>
+  <div class="label-top">classes remaining</div>
   <span class="number" id="num">—</span>
   <div class="label-bottom" id="lbl"></div>
   <div class="next-class" id="next"></div>
