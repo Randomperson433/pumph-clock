@@ -8,208 +8,121 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     :root {
-      --bg: #000;
-      --fg: #fff;
-      --accent: #ff2d2d;
-      --dim: #444;
-      --btn-bg: #111;
-      --btn-border: #333;
-      --btn-active: #fff;
+      --bg:#000; --fg:#fff; --accent:#ff2d2d;
+      --dim:#444; --btn-bg:#111; --btn-border:#333; --btn-active:#fff;
     }
-    html, body {
-      width: 100%; height: 100%;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: 'Space Mono', monospace;
-      overflow: hidden;
-    }
-
-    /* ── TOP BAR ── */
+    html, body { width:100%; height:100%; background:var(--bg); color:var(--fg); font-family:'Space Mono',monospace; overflow:hidden; }
     .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1rem;
-      border-bottom: 1px solid var(--btn-border);
-      position: relative;
-      z-index: 10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.6rem 1rem; border-bottom:1px solid var(--btn-border);
+      position:relative; z-index:10; gap:0.5rem;
     }
-    .block-tabs {
-      display: flex;
-      gap: 0.35rem;
-      flex-wrap: wrap;
-    }
+    .block-tabs { display:flex; gap:0.35rem; flex-wrap:wrap; }
     .block-tab {
-      font-family: 'Space Mono', monospace;
-      font-weight: 700;
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      padding: 0.3rem 0.55rem;
-      border: 1px solid var(--btn-border);
-      background: var(--btn-bg);
-      color: var(--dim);
-      cursor: pointer;
-      transition: all 0.15s;
-      text-transform: uppercase;
-      white-space: nowrap;
+      font-family:'Space Mono',monospace; font-weight:700;
+      font-size:0.65rem; letter-spacing:0.08em; padding:0.3rem 0.55rem;
+      border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--dim);
+      cursor:pointer; transition:all 0.15s; text-transform:uppercase; white-space:nowrap;
     }
-    .block-tab:hover { border-color: #666; color: #999; }
-    .block-tab.active {
-      border-color: var(--btn-active);
-      color: var(--btn-active);
-      background: #1a1a1a;
-    }
-    .block-tab.done-tab {
-      border-color: var(--accent) !important;
-      color: var(--accent) !important;
-    }
-
-    /* ── THREE DOTS MENU ── */
-    .menu-wrap { position: relative; flex-shrink: 0; }
+    .block-tab:hover { border-color:#666; color:#999; }
+    .block-tab.active { border-color:var(--btn-active); color:var(--btn-active); background:#1a1a1a; }
+    .block-tab.done-tab { border-color:var(--accent) !important; color:var(--accent) !important; }
+    .menu-wrap { position:relative; flex-shrink:0; }
     .dots-btn {
-      background: none;
-      border: 1px solid var(--btn-border);
-      color: var(--dim);
-      cursor: pointer;
-      padding: 0.3rem 0.6rem;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      transition: color 0.15s;
-      line-height: 1;
+      background:none; border:1px solid var(--btn-border); color:var(--dim);
+      cursor:pointer; padding:0.3rem 0.6rem; font-size:0.9rem;
+      letter-spacing:0.1em; transition:color 0.15s; line-height:1;
     }
-    .dots-btn:hover { color: #fff; border-color: #666; }
-
-    /* Dropdown: anchored to viewport on mobile so it never clips */
+    .dots-btn:hover { color:#fff; border-color:#666; }
     .dropdown {
-      display: none;
-      position: fixed;
-      top: 50px;
-      right: 0.75rem;
-      background: #111;
-      border: 1px solid #333;
-      padding: 0.75rem;
-      width: min(260px, calc(100vw - 1.5rem));
-      z-index: 300;
-      flex-direction: column;
-      gap: 0.5rem;
+      display:none; position:fixed; top:50px; right:0.75rem;
+      background:#111; border:1px solid #333; padding:0.75rem;
+      width:min(260px, calc(100vw - 1.5rem)); z-index:300;
+      flex-direction:column; gap:0.6rem;
     }
-    .dropdown.open { display: flex; }
-    .dropdown label {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--dim);
-      text-transform: uppercase;
-    }
+    .dropdown.open { display:flex; }
+    .dropdown label { font-size:0.6rem; letter-spacing:0.2em; color:var(--dim); text-transform:uppercase; }
     .dropdown input[type="text"] {
-      background: #000;
-      border: 1px solid #333;
-      color: #fff;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      padding: 0.4rem 0.5rem;
-      width: 100%;
-      outline: none;
+      background:#000; border:1px solid #333; color:#fff;
+      font-family:'Space Mono',monospace; font-size:0.8rem;
+      padding:0.4rem 0.5rem; width:100%; outline:none;
     }
-    .dropdown input[type="text"]:focus { border-color: #888; }
-    .dropdown-row { display: flex; flex-direction: column; gap: 0.3rem; }
+    .dropdown input[type="text"]:focus { border-color:#888; }
+    .dropdown-row { display:flex; flex-direction:column; gap:0.3rem; }
+    .dropdown-divider { border:none; border-top:1px solid #222; margin:0.1rem 0; }
+    .year-toggle { display:flex; gap:0.4rem; }
+    .year-btn {
+      flex:1; font-family:'Space Mono',monospace; font-size:0.6rem;
+      letter-spacing:0.1em; font-weight:700; text-transform:uppercase;
+      background:#000; color:var(--dim); border:1px solid #333;
+      padding:0.35rem 0; cursor:pointer; transition:all 0.15s;
+    }
+    .year-btn:hover { color:#999; border-color:#666; }
+    .year-btn.active { background:#fff; color:#000; border-color:#fff; }
+    .year-btn:disabled { opacity:0.25; cursor:not-allowed; }
+    .year-btn:disabled:hover { color:var(--dim); border-color:#333; }
     .save-btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      font-weight: 700;
-      text-transform: uppercase;
-      background: #fff;
-      color: #000;
-      border: none;
-      padding: 0.4rem 0.75rem;
-      cursor: pointer;
-      transition: background 0.15s;
+      font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.15em;
+      font-weight:700; text-transform:uppercase; background:#fff; color:#000;
+      border:none; padding:0.4rem 0.75rem; cursor:pointer; transition:background 0.15s;
     }
-    .save-btn:hover { background: #ddd; }
-
-    /* ── MAIN DISPLAY ── */
+    .save-btn:hover { background:#ddd; }
     .main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: calc(100vh - 49px);
-      padding: 0 1rem 1rem;
-      text-align: center;
-      gap: 0;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      height:calc(100vh - 49px); padding:0 1rem 1rem; text-align:center; gap:0;
     }
-
     .block-badge {
-      font-size: clamp(0.6rem, 1.8vw, 0.75rem);
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: #555;
-      border: 1px solid #1e1e1e;
-      padding: 0.2rem 0.6rem;
-      margin-bottom: clamp(0.2rem, 1vh, 0.6rem);
+      font-size:clamp(0.6rem,1.8vw,0.75rem); letter-spacing:0.35em; text-transform:uppercase;
+      color:#555; border:1px solid #1e1e1e; padding:0.2rem 0.6rem;
+      margin-bottom:clamp(0.2rem,1vh,0.6rem);
     }
-
     .label-top {
-      font-size: clamp(0.55rem, 1.8vw, 0.8rem);
-      letter-spacing: 0.4em;
-      color: var(--dim);
-      text-transform: uppercase;
-      margin-bottom: clamp(0rem, 0.5vh, 0.4rem);
+      font-size:clamp(0.55rem,1.8vw,0.8rem); letter-spacing:0.4em;
+      color:var(--dim); text-transform:uppercase; margin-bottom:clamp(0rem,0.5vh,0.4rem);
     }
-
     .number {
-      font-family: 'Bebas Neue', sans-serif;
-      /* Fill ~60% of viewport height */
-      font-size: clamp(10rem, 55vh, 55vw);
-      line-height: 0.88;
-      color: var(--fg);
-      display: block;
+      font-family:'Bebas Neue',sans-serif; font-size:clamp(10rem,55vh,55vw);
+      line-height:0.88; color:var(--fg); display:block;
     }
-    .number.has-count {
-      text-shadow: 4px 4px 0 var(--accent), 9px 9px 0 rgba(255,45,45,0.2);
-    }
-    .number.zero {
-      color: var(--accent);
-      text-shadow: none;
-    }
-
+    .number.has-count { text-shadow:4px 4px 0 var(--accent),9px 9px 0 rgba(255,45,45,0.2); }
+    .number.zero { color:var(--accent); text-shadow:none; }
     .label-bottom {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.6rem, 7vw, 5rem);
-      letter-spacing: 0.1em;
-      line-height: 1.05;
-      margin-top: clamp(0.1rem, 0.8vh, 0.5rem);
+      font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,7vw,5rem);
+      letter-spacing:0.1em; line-height:1.05; margin-top:clamp(0.1rem,0.8vh,0.5rem);
     }
-    .label-bottom.done {
-      color: var(--accent);
-      font-size: clamp(1.2rem, 5vw, 3.5rem);
-    }
-
+    .label-bottom.done { color:var(--accent); font-size:clamp(1.2rem,5vw,3.5rem); }
     .next-class {
-      margin-top: clamp(0.4rem, 1.5vh, 1.2rem);
-      font-size: clamp(0.55rem, 1.5vw, 0.75rem);
-      color: var(--dim);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      margin-top:clamp(0.4rem,1.5vh,1.2rem); font-size:clamp(0.55rem,1.5vw,0.75rem);
+      color:var(--dim); letter-spacing:0.2em; text-transform:uppercase;
     }
-    .next-class span { color: #777; }
-
-    @keyframes flash {
-      0% { transform: scale(1.03); opacity: 0.7; }
-      100% { transform: scale(1); opacity: 1; }
+    .next-class span { color:#777; }
+    /* confetti canvas */
+    #confetti-canvas {
+      position:fixed; inset:0; pointer-events:none; z-index:999;
+      opacity:0; transition:opacity 0.3s;
     }
-    .tick { animation: flash 0.35s ease; }
+    #confetti-canvas.active { opacity:1; }
+    @keyframes flash { 0%{transform:scale(1.03);opacity:0.7} 100%{transform:scale(1);opacity:1} }
+    .tick { animation:flash 0.35s ease; }
   </style>
 </head>
 <body>
-
+<canvas id="confetti-canvas"></canvas>
 <div class="topbar">
   <div class="block-tabs" id="tabs"></div>
   <div class="menu-wrap">
-    <button class="dots-btn" id="dotsBtn" title="Settings">• • •</button>
+    <button class="dots-btn" id="dotsBtn">• • •</button>
     <div class="dropdown" id="dropdown">
+      <div class="dropdown-row">
+        <label>Year</label>
+        <div class="year-toggle">
+          <button class="year-btn" id="yr2526" onclick="setYear('2025-26')">2025–26</button>
+          <button class="year-btn" id="yr2627" onclick="setYear('2026-27')" id="yr2627btn">2026–27</button>
+        </div>
+      </div>
+      <hr class="dropdown-divider" />
       <div class="dropdown-row">
         <label>Teacher name for active block</label>
         <input type="text" id="teacherInput" placeholder="e.g. Pumphrey" />
@@ -218,40 +131,157 @@
     </div>
   </div>
 </div>
-
 <div class="main">
   <div class="block-badge" id="badge">A BLOCK</div>
+  <div class="label-top">classes remaining</div>
   <span class="number" id="num">—</span>
   <div class="label-bottom" id="lbl"></div>
   <div class="next-class" id="next"></div>
 </div>
-
 <script>
-const blockTimes = {
-  A: ['2026-06-04T09:19:00','2026-06-08T11:33:00','2026-06-09T10:26:00','2026-06-10T10:08:00','2026-06-12T10:26:00','2026-06-15T09:19:00'],
-  B: ['2026-06-04T10:26:00','2026-06-05T09:19:00','2026-06-09T11:33:00','2026-06-10T11:04:00','2026-06-12T09:19:00','2026-06-15T10:26:00'],
-  C: ['2026-06-04T11:33:00','2026-06-05T10:26:00','2026-06-08T09:19:00','2026-06-10T12:00:00','2026-06-11T09:19:00','2026-06-15T11:33:00'],
-  D: ['2026-06-05T11:33:00','2026-06-08T10:26:00','2026-06-09T09:19:00','2026-06-11T10:26:00','2026-06-12T11:33:00'],
-  E: ['2026-06-04T13:08:00','2026-06-08T14:46:00','2026-06-09T13:08:00','2026-06-11T11:33:00','2026-06-12T14:46:00','2026-06-15T13:08:00'],
-  F: ['2026-06-04T14:46:00','2026-06-05T13:08:00','2026-06-09T14:46:00','2026-06-10T14:46:00','2026-06-11T13:08:00','2026-06-15T14:46:00'],
-  G: ['2026-06-05T14:46:00','2026-06-08T13:08:00','2026-06-10T13:50:00','2026-06-11T14:46:00','2026-06-12T13:08:00'],
-};
-const BLOCKS = ['A','B','C','D','E','F','G'];
+// ─────────────────────────────────────────────────────────────────
+// SCHEDULE CONFIG
+// ─────────────────────────────────────────────────────────────────
 
+const DAY_SCHEDULE = {
+  1: ['A','B','C','E','F'],
+  2: ['B','C','D','F','G'],
+  3: ['C','D','A','G','E'],
+  4: ['D','A','B','E','F'],
+  5: ['A','B','C','G','F'],
+  6: ['C','D','E','F','G'],
+  7: ['B','A','D','G','E'],
+};
+const PERIODS_REG = [
+  ['08:15','09:19'],['09:22','10:26'],['10:29','11:33'],
+  ['11:36','13:08'],['13:42','14:46'],
+];
+const PERIODS_WED = [
+  ['09:15','10:08'],['10:11','11:04'],['11:07','12:00'],
+  ['12:03','13:50'],['13:53','14:46'],
+];
+
+// ─────────────────────────────────────────────────────────────────
+// 2025-26: hardcoded final exam end times per block
+// Regular classes ran through Jun 12; finals Jun 15-18.
+// The last entry for each block is its EXAM (start, end).
+// ─────────────────────────────────────────────────────────────────
+// Jun 15: Day 1 — regular A,B,C,E,F blocks + F exam 1:11-2:46
+//   A: 08:15-09:19, B: 09:22-10:26, C: 10:29-11:33, E: 11:36-13:08, F exam: 13:11-14:46
+// Jun 16: A exam 08:15-09:45, B exam 10:05-11:35
+// Jun 17: C exam 08:15-09:45, D exam 10:05-11:35
+// Jun 18: E exam 08:15-09:45, G exam 10:05-11:35
+
+const FINALS_2526 = {
+  A: [['2026-06-15T08:15:00','2026-06-15T09:19:00'], ['2026-06-16T08:15:00','2026-06-16T09:45:00']],
+  B: [['2026-06-15T09:22:00','2026-06-15T10:26:00'], ['2026-06-16T10:05:00','2026-06-16T11:35:00']],
+  C: [['2026-06-15T10:29:00','2026-06-15T11:33:00'], ['2026-06-17T08:15:00','2026-06-17T09:45:00']],
+  D: [['2026-06-17T10:05:00','2026-06-17T11:35:00']], // no regular class Jun 15
+  E: [['2026-06-15T11:36:00','2026-06-15T13:08:00'], ['2026-06-18T08:15:00','2026-06-18T09:45:00']],
+  F: [['2026-06-15T13:11:00','2026-06-15T14:46:00']], // exam IS the last class
+  G: [['2026-06-18T10:05:00','2026-06-18T11:35:00']], // no regular class Jun 15
+};
+
+// ─────────────────────────────────────────────────────────────────
+// YEAR UNLOCK: 2026-27 unlocks automatically on Sep 1, 2026
+// ─────────────────────────────────────────────────────────────────
+const UNLOCK_2627 = new Date('2026-09-01T00:00:00');
+function is2627Unlocked() { return new Date() >= UNLOCK_2627; }
+
+const YEARS = {
+  '2025-26': {
+    startDate: '2026-06-04', startDayNum: 1,
+    endDate: '2026-06-12',   // regular classes end Jun 12; finals handled separately
+    noSchool: new Set(),
+  },
+  '2026-27': {
+    startDate: '2026-09-02', startDayNum: 1,
+    endDate: '2027-06-18',
+    noSchool: new Set([
+      '2026-09-04','2026-09-07','2026-10-12',
+      '2026-11-03','2026-11-11','2026-11-26','2026-11-27',
+      '2026-12-24','2026-12-25','2026-12-26','2026-12-27',
+      '2026-12-28','2026-12-29','2026-12-30','2026-12-31',
+      '2027-01-01','2027-01-18',
+      '2027-02-15','2027-02-16','2027-02-17','2027-02-18','2027-02-19',
+      '2027-03-15','2027-03-26',
+      '2027-04-19','2027-04-20','2027-04-21','2027-04-22','2027-04-23',
+      '2027-05-31',
+    ]),
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────
+// GENERATOR
+// ─────────────────────────────────────────────────────────────────
+
+function pad(n) { return String(n).padStart(2,'0'); }
+
+function buildBlockTimes(yearKey) {
+  const { startDate, startDayNum, endDate, noSchool } = YEARS[yearKey];
+  const result = { A:[],B:[],C:[],D:[],E:[],F:[],G:[] };
+  let current = new Date(startDate + 'T12:00:00');
+  const end   = new Date(endDate   + 'T12:00:00');
+  let dayNum  = startDayNum;
+  while (current <= end) {
+    const dow = current.getDay();
+    const iso = current.toISOString().slice(0,10);
+    if (dow >= 1 && dow <= 5 && !noSchool.has(iso)) {
+      const isWed   = dow === 3;
+      const periods = isWed ? PERIODS_WED : PERIODS_REG;
+      DAY_SCHEDULE[dayNum].forEach((b, i) => {
+        const [sh,sm] = periods[i][0].split(':').map(Number);
+        const [eh,em] = periods[i][1].split(':').map(Number);
+        result[b].push([`${iso}T${pad(sh)}:${pad(sm)}:00`, `${iso}T${pad(eh)}:${pad(em)}:00`]);
+      });
+      dayNum = (dayNum % 7) + 1;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  // Append finals for 2025-26
+  if (yearKey === '2025-26') {
+    Object.entries(FINALS_2526).forEach(([b, entries]) => {
+      result[b].push(...entries);
+      // Sort by start time
+      result[b].sort((a,z) => a[0].localeCompare(z[0]));
+    });
+  }
+  return result;
+}
+
+const scheduleCache = {};
+function getSchedule(yearKey) {
+  if (!scheduleCache[yearKey]) scheduleCache[yearKey] = buildBlockTimes(yearKey);
+  return scheduleCache[yearKey];
+}
+
+// ─────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────
+
+const BLOCKS = ['A','B','C','D','E','F','G'];
 let activeBlock = localStorage.getItem('activeBlock') || 'A';
-let teachers = JSON.parse(localStorage.getItem('teachers') || '{}');
-// No default teacher — blank slate
+let activeYear  = localStorage.getItem('activeYear')  || '2025-26';
+let teachers    = JSON.parse(localStorage.getItem('teachers') || '{}');
+
+// If stored year is 2026-27 but not yet unlocked, fall back
+if (activeYear === '2026-27' && !is2627Unlocked()) activeYear = '2025-26';
+
+// ─────────────────────────────────────────────────────────────────
+// LOGIC
+// ─────────────────────────────────────────────────────────────────
 
 function getCount(block) {
   const now = new Date();
-  return blockTimes[block].filter(t => new Date(t) > now).length;
+  return getSchedule(activeYear)[block].filter(([,end]) => new Date(end) > now).length;
 }
-function getNext(block) {
+function getNextStart(block) {
   const now = new Date();
-  return blockTimes[block].map(t => new Date(t)).find(d => d > now) || null;
+  const entry = getSchedule(activeYear)[block].find(([,end]) => new Date(end) > now);
+  return entry ? new Date(entry[0]) : null;
 }
 function formatDate(d) {
-  return d.toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+  return d.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
 }
 function possessive(name) {
   if (!name) return null;
@@ -260,6 +290,88 @@ function possessive(name) {
   return t.match(/s$/i) ? t + "'" : t + 's';
 }
 
+// ─────────────────────────────────────────────────────────────────
+// CONFETTI
+// ─────────────────────────────────────────────────────────────────
+
+const canvas  = document.getElementById('confetti-canvas');
+const ctx     = canvas.getContext('2d');
+let confettiParticles = [];
+let confettiRAF = null;
+let confettiActive = false;
+
+function launchConfetti() {
+  if (confettiActive) return;
+  confettiActive = true;
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add('active');
+
+  const colors = ['#ff2d2d','#fff','#ff9900','#00e5ff','#ff4dd2','#aaff00'];
+  confettiParticles = Array.from({length: 180}, () => ({
+    x: Math.random() * canvas.width,
+    y: -10 - Math.random() * 200,
+    r: 4 + Math.random() * 6,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    vx: (Math.random() - 0.5) * 4,
+    vy: 2 + Math.random() * 4,
+    spin: (Math.random() - 0.5) * 0.3,
+    angle: Math.random() * Math.PI * 2,
+    shape: Math.random() < 0.5 ? 'rect' : 'circle',
+  }));
+
+  let start = null;
+  const DURATION = 4000;
+
+  function draw(ts) {
+    if (!start) start = ts;
+    const elapsed = ts - start;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    confettiParticles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.08; // gravity
+      p.angle += p.spin;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.r, -p.r * 0.5, p.r * 2, p.r);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    // Fade out in last second
+    if (elapsed > DURATION - 1000) {
+      canvas.style.opacity = Math.max(0, 1 - (elapsed - (DURATION - 1000)) / 1000);
+    }
+
+    if (elapsed < DURATION) {
+      confettiRAF = requestAnimationFrame(draw);
+    } else {
+      canvas.classList.remove('active');
+      canvas.style.opacity = '';
+      confettiActive = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  confettiRAF = requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => {
+  if (confettiActive) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+});
+
+// ─────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────
+
 const numEl   = document.getElementById('num');
 const lblEl   = document.getElementById('lbl');
 const nextEl  = document.getElementById('next');
@@ -267,32 +379,49 @@ const badgeEl = document.getElementById('badge');
 const tabsEl  = document.getElementById('tabs');
 let lastCounts = {};
 
+function renderYearBtns() {
+  const btn2526 = document.getElementById('yr2526');
+  const btn2627 = document.getElementById('yr2627');
+  btn2526.className = 'year-btn' + (activeYear === '2025-26' ? ' active' : '');
+  const unlocked = is2627Unlocked();
+  btn2627.className = 'year-btn' + (activeYear === '2026-27' ? ' active' : '');
+  btn2627.disabled = !unlocked;
+  btn2627.title = unlocked ? '' : 'Unlocks Sep 1, 2026';
+}
+
+function setYear(y) {
+  if (y === '2026-27' && !is2627Unlocked()) return;
+  activeYear = y;
+  localStorage.setItem('activeYear', y);
+  lastCounts = {};
+  renderYearBtns();
+  renderTabs();
+  renderMain();
+}
+
 function renderTabs() {
   tabsEl.innerHTML = '';
   BLOCKS.forEach(b => {
     const btn = document.createElement('button');
-    const isDone = getCount(b) === 0;
-    btn.className = 'block-tab' + (b === activeBlock ? ' active' : '') + (isDone ? ' done-tab' : '');
+    btn.className = 'block-tab' + (b === activeBlock ? ' active' : '') + (getCount(b) === 0 ? ' done-tab' : '');
     btn.textContent = b + ' BLOCK';
-    btn.onclick = () => {
-      activeBlock = b;
-      localStorage.setItem('activeBlock', b);
-      renderTabs();
-      renderMain();
-    };
+    btn.onclick = () => { activeBlock = b; localStorage.setItem('activeBlock', b); renderTabs(); renderMain(); };
     tabsEl.appendChild(btn);
   });
 }
 
 function renderMain() {
-  const b = activeBlock;
+  const b     = activeBlock;
   const count = getCount(b);
-  const name = possessive(teachers[b]);
+  const name  = possessive(teachers[b]);
   badgeEl.textContent = b + ' BLOCK';
 
+  const wasNonZero = lastCounts[b] > 0;
   if (count !== lastCounts[b]) {
     numEl.classList.add('tick');
     setTimeout(() => numEl.classList.remove('tick'), 350);
+    // Fire confetti when it JUST hit zero
+    if (count === 0 && wasNonZero) launchConfetti();
     lastCounts[b] = count;
   }
 
@@ -311,12 +440,15 @@ function renderMain() {
     lblEl.textContent = name
       ? name.toUpperCase() + ' LEFT'
       : b + ' BLOCK' + (count === 1 ? '' : 'S') + ' LEFT';
-    const nxt = getNext(b);
+    const nxt = getNextStart(b);
     if (nxt) nextEl.innerHTML = `next: <span>${formatDate(nxt)}</span>`;
   }
 }
 
-// Dropdown
+// ─────────────────────────────────────────────────────────────────
+// DROPDOWN
+// ─────────────────────────────────────────────────────────────────
+
 const dotsBtn  = document.getElementById('dotsBtn');
 const dropdown = document.getElementById('dropdown');
 const input    = document.getElementById('teacherInput');
@@ -325,27 +457,27 @@ const saveBtn  = document.getElementById('saveBtn');
 dotsBtn.addEventListener('click', e => {
   e.stopPropagation();
   dropdown.classList.toggle('open');
-  if (dropdown.classList.contains('open')) {
-    input.value = teachers[activeBlock] || '';
-    input.focus();
-  }
+  if (dropdown.classList.contains('open')) { input.value = teachers[activeBlock] || ''; input.focus(); }
 });
 document.addEventListener('click', e => {
-  if (!dropdown.contains(e.target) && e.target !== dotsBtn)
-    dropdown.classList.remove('open');
+  if (!dropdown.contains(e.target) && e.target !== dotsBtn) dropdown.classList.remove('open');
 });
 saveBtn.addEventListener('click', () => {
   teachers[activeBlock] = input.value.trim();
   localStorage.setItem('teachers', JSON.stringify(teachers));
   dropdown.classList.remove('open');
-  renderMain();
-  renderTabs();
+  renderMain(); renderTabs();
 });
 input.addEventListener('keydown', e => { if (e.key === 'Enter') saveBtn.click(); });
 
+// ─────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────
+
+renderYearBtns();
 renderTabs();
 renderMain();
-setInterval(() => { renderMain(); renderTabs(); }, 10000);
+setInterval(() => { renderMain(); renderTabs(); renderYearBtns(); }, 10000);
 </script>
 </body>
 </html>
