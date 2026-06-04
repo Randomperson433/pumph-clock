@@ -240,8 +240,6 @@ const BLOCKS = ['A','B','C','D','E','F','G'];
 // ── STATE ─────────────────────────────────────────────────────────────────
 let activeBlock = localStorage.getItem('activeBlock') || 'A';
 let teachers = JSON.parse(localStorage.getItem('teachers') || '{}');
-// Pre-populate A block with Pumphrey
-if (!teachers['A']) teachers['A'] = 'Pumphrey';
 
 // ── HELPERS ───────────────────────────────────────────────────────────────
 function getCount(block) {
