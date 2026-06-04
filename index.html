@@ -14,48 +14,46 @@
       --fg: #fff;
       --accent: #ff2d2d;
       --dim: #444;
-      --dim2: #222;
       --btn-bg: #111;
       --btn-border: #333;
       --btn-active: #fff;
     }
     html, body {
-      width: 100%; min-height: 100%;
+      width: 100%; height: 100%;
       background: var(--bg);
       color: var(--fg);
       font-family: 'Space Mono', monospace;
+      overflow: hidden;
     }
-
 
     /* ── TOP BAR ── */
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1.25rem;
+      padding: 0.6rem 1rem;
       border-bottom: 1px solid var(--btn-border);
-      gap: 0.5rem;
-      flex-wrap: wrap;
       position: relative;
       z-index: 10;
     }
     .block-tabs {
       display: flex;
-      gap: 0.4rem;
+      gap: 0.35rem;
       flex-wrap: wrap;
     }
     .block-tab {
       font-family: 'Space Mono', monospace;
       font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      padding: 0.35rem 0.7rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.55rem;
       border: 1px solid var(--btn-border);
       background: var(--btn-bg);
       color: var(--dim);
       cursor: pointer;
       transition: all 0.15s;
       text-transform: uppercase;
+      white-space: nowrap;
     }
     .block-tab:hover { border-color: #666; color: #999; }
     .block-tab.active {
@@ -69,37 +67,40 @@
     }
 
     /* ── THREE DOTS MENU ── */
-    .menu-wrap { position: relative; }
+    .menu-wrap { position: relative; flex-shrink: 0; }
     .dots-btn {
       background: none;
       border: 1px solid var(--btn-border);
       color: var(--dim);
       cursor: pointer;
-      padding: 0.35rem 0.65rem;
-      font-size: 1rem;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.9rem;
       letter-spacing: 0.1em;
       transition: color 0.15s;
+      line-height: 1;
     }
     .dots-btn:hover { color: #fff; border-color: #666; }
+
+    /* Dropdown: anchored to viewport on mobile so it never clips */
     .dropdown {
       display: none;
-      position: absolute;
-      right: 0; top: calc(100% + 6px);
+      position: fixed;
+      top: 50px;
+      right: 0.75rem;
       background: #111;
       border: 1px solid #333;
       padding: 0.75rem;
-      min-width: 220px;
-      z-index: 200;
+      width: min(260px, calc(100vw - 1.5rem));
+      z-index: 300;
       flex-direction: column;
       gap: 0.5rem;
     }
     .dropdown.open { display: flex; }
     .dropdown label {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       letter-spacing: 0.2em;
       color: var(--dim);
       text-transform: uppercase;
-      margin-bottom: 0.1rem;
     }
     .dropdown input[type="text"] {
       background: #000;
@@ -112,9 +113,8 @@
       outline: none;
     }
     .dropdown input[type="text"]:focus { border-color: #888; }
-    .dropdown-row { display: flex; flex-direction: column; }
+    .dropdown-row { display: flex; flex-direction: column; gap: 0.3rem; }
     .save-btn {
-      margin-top: 0.25rem;
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
       letter-spacing: 0.15em;
@@ -135,68 +135,72 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: calc(100vh - 60px);
-      padding: 2rem 1rem;
+      height: calc(100vh - 49px);
+      padding: 0 1rem 1rem;
       text-align: center;
+      gap: 0;
     }
+
+    .block-badge {
+      font-size: clamp(0.6rem, 1.8vw, 0.75rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #555;
+      border: 1px solid #1e1e1e;
+      padding: 0.2rem 0.6rem;
+      margin-bottom: clamp(0.2rem, 1vh, 0.6rem);
+    }
+
     .label-top {
-      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+      font-size: clamp(0.55rem, 1.8vw, 0.8rem);
       letter-spacing: 0.4em;
       color: var(--dim);
       text-transform: uppercase;
-      margin-bottom: 1rem;
+      margin-bottom: clamp(0rem, 0.5vh, 0.4rem);
     }
+
     .number {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(14rem, 35vw, 26rem);
-      line-height: 0.82;
+      /* Fill ~60% of viewport height */
+      font-size: clamp(10rem, 55vh, 55vw);
+      line-height: 0.88;
       color: var(--fg);
       display: block;
-      transition: transform 0.1s;
     }
     .number.has-count {
-      text-shadow: 5px 5px 0 var(--accent), 10px 10px 0 rgba(255,45,45,0.25);
+      text-shadow: 4px 4px 0 var(--accent), 9px 9px 0 rgba(255,45,45,0.2);
     }
     .number.zero {
       color: var(--accent);
       text-shadow: none;
     }
+
     .label-bottom {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 6vw, 5rem);
+      font-size: clamp(1.6rem, 7vw, 5rem);
       letter-spacing: 0.1em;
-      line-height: 1.1;
-      margin-top: 0.4rem;
+      line-height: 1.05;
+      margin-top: clamp(0.1rem, 0.8vh, 0.5rem);
     }
-    .label-bottom.done { color: var(--accent); font-size: clamp(1.5rem, 4vw, 3.5rem); }
+    .label-bottom.done {
+      color: var(--accent);
+      font-size: clamp(1.2rem, 5vw, 3.5rem);
+    }
+
     .next-class {
-      margin-top: 2rem;
-      font-size: clamp(0.6rem, 1.3vw, 0.8rem);
+      margin-top: clamp(0.4rem, 1.5vh, 1.2rem);
+      font-size: clamp(0.55rem, 1.5vw, 0.75rem);
       color: var(--dim);
       letter-spacing: 0.2em;
       text-transform: uppercase;
     }
     .next-class span { color: #777; }
-    .block-badge {
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      font-size: clamp(0.65rem, 1.2vw, 0.75rem);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: #555;
-      border: 1px solid #222;
-      padding: 0.2rem 0.6rem;
-    }
 
     @keyframes flash {
-      0% { transform: scale(1.04); opacity: 0.7; }
+      0% { transform: scale(1.03); opacity: 0.7; }
       100% { transform: scale(1); opacity: 1; }
     }
     .tick { animation: flash 0.35s ease; }
-    @keyframes flicker {
-      0%,100% { opacity:1 } 25% { opacity:0.88 } 60% { opacity:1 } 80% { opacity:0.93 }
-    }
-    .main { animation: flicker 0.5s ease; }
   </style>
 </head>
 <body>
@@ -215,16 +219,15 @@
   </div>
 </div>
 
-<div class="main" id="main">
+<div class="main">
   <div class="block-badge" id="badge">A BLOCK</div>
+  <div class="label-top">classes remaining</div>
   <span class="number" id="num">—</span>
   <div class="label-bottom" id="lbl"></div>
   <div class="next-class" id="next"></div>
 </div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────
-// End times for each class occurrence (class "used up" once end time passes)
 const blockTimes = {
   A: ['2026-06-04T09:19:00','2026-06-08T11:33:00','2026-06-09T10:26:00','2026-06-10T10:08:00','2026-06-12T10:26:00','2026-06-15T09:19:00'],
   B: ['2026-06-04T10:26:00','2026-06-05T09:19:00','2026-06-09T11:33:00','2026-06-10T11:04:00','2026-06-12T09:19:00','2026-06-15T10:26:00'],
@@ -234,38 +237,30 @@ const blockTimes = {
   F: ['2026-06-04T14:46:00','2026-06-05T13:08:00','2026-06-09T14:46:00','2026-06-10T14:46:00','2026-06-11T13:08:00','2026-06-15T14:46:00'],
   G: ['2026-06-05T14:46:00','2026-06-08T13:08:00','2026-06-10T13:50:00','2026-06-11T14:46:00','2026-06-12T13:08:00'],
 };
-
 const BLOCKS = ['A','B','C','D','E','F','G'];
 
-// ── STATE ─────────────────────────────────────────────────────────────────
 let activeBlock = localStorage.getItem('activeBlock') || 'A';
 let teachers = JSON.parse(localStorage.getItem('teachers') || '{}');
+// No default teacher — blank slate
 
-// ── HELPERS ───────────────────────────────────────────────────────────────
 function getCount(block) {
   const now = new Date();
   return blockTimes[block].filter(t => new Date(t) > now).length;
 }
-
 function getNext(block) {
   const now = new Date();
   return blockTimes[block].map(t => new Date(t)).find(d => d > now) || null;
 }
-
 function formatDate(d) {
   return d.toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
 }
-
 function possessive(name) {
   if (!name) return null;
-  const trimmed = name.trim();
-  if (!trimmed) return null;
-  // If ends in s (case-insensitive), don't add s
-  if (trimmed.match(/s$/i)) return trimmed + "'";
-  return trimmed + 's';
+  const t = name.trim();
+  if (!t) return null;
+  return t.match(/s$/i) ? t + "'" : t + 's';
 }
 
-// ── RENDER ────────────────────────────────────────────────────────────────
 const numEl   = document.getElementById('num');
 const lblEl   = document.getElementById('lbl');
 const nextEl  = document.getElementById('next');
@@ -277,9 +272,15 @@ function renderTabs() {
   tabsEl.innerHTML = '';
   BLOCKS.forEach(b => {
     const btn = document.createElement('button');
-    btn.className = 'block-tab' + (b === activeBlock ? ' active' : '') + (getCount(b) === 0 ? ' done-tab' : '');
+    const isDone = getCount(b) === 0;
+    btn.className = 'block-tab' + (b === activeBlock ? ' active' : '') + (isDone ? ' done-tab' : '');
     btn.textContent = b + ' BLOCK';
-    btn.onclick = () => { activeBlock = b; localStorage.setItem('activeBlock', b); renderTabs(); renderMain(); };
+    btn.onclick = () => {
+      activeBlock = b;
+      localStorage.setItem('activeBlock', b);
+      renderTabs();
+      renderMain();
+    };
     tabsEl.appendChild(btn);
   });
 }
@@ -301,31 +302,22 @@ function renderMain() {
   if (count === 0) {
     numEl.className = 'number zero';
     lblEl.className = 'label-bottom done';
-    if (name) {
-      lblEl.textContent = 'NO MORE ' + name.toUpperCase().replace(/[']/g,'') + '!';
-    } else {
-      lblEl.textContent = 'NO MORE ' + b + ' BLOCK!';
-    }
+    lblEl.textContent = name
+      ? 'NO MORE ' + name.toUpperCase().replace(/'/g,'') + '!'
+      : 'NO MORE ' + b + ' BLOCK!';
     nextEl.textContent = '';
   } else {
     numEl.className = 'number has-count';
     lblEl.className = 'label-bottom';
-    if (name) {
-      lblEl.textContent = (count === 1 ? name : name).toUpperCase() + ' LEFT';
-      // singular: "1 Pumphrey left" — possessive still looks fine
-      // Could do: count === 1 ? plain name : possessive, but "Pumphreys" is the joke
-    } else {
-      lblEl.textContent = b + ' BLOCK' + (count === 1 ? '' : 'S') + ' LEFT';
-    }
-
+    lblEl.textContent = name
+      ? name.toUpperCase() + ' LEFT'
+      : b + ' BLOCK' + (count === 1 ? '' : 'S') + ' LEFT';
     const nxt = getNext(b);
-    if (nxt) {
-      nextEl.innerHTML = `next: <span>${formatDate(nxt)}</span>`;
-    }
+    if (nxt) nextEl.innerHTML = `next: <span>${formatDate(nxt)}</span>`;
   }
 }
 
-// ── SETTINGS DROPDOWN ─────────────────────────────────────────────────────
+// Dropdown
 const dotsBtn  = document.getElementById('dotsBtn');
 const dropdown = document.getElementById('dropdown');
 const input    = document.getElementById('teacherInput');
@@ -339,13 +331,10 @@ dotsBtn.addEventListener('click', e => {
     input.focus();
   }
 });
-
 document.addEventListener('click', e => {
-  if (!dropdown.contains(e.target) && e.target !== dotsBtn) {
+  if (!dropdown.contains(e.target) && e.target !== dotsBtn)
     dropdown.classList.remove('open');
-  }
 });
-
 saveBtn.addEventListener('click', () => {
   teachers[activeBlock] = input.value.trim();
   localStorage.setItem('teachers', JSON.stringify(teachers));
@@ -353,10 +342,8 @@ saveBtn.addEventListener('click', () => {
   renderMain();
   renderTabs();
 });
-
 input.addEventListener('keydown', e => { if (e.key === 'Enter') saveBtn.click(); });
 
-// ── INIT ──────────────────────────────────────────────────────────────────
 renderTabs();
 renderMain();
 setInterval(() => { renderMain(); renderTabs(); }, 10000);
